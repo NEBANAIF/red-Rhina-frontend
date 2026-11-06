@@ -1,0 +1,17 @@
+# Dependencies and build output - never commit these (node_modules is tens of thousands of files)
+node_modules/
+dist/
+.vite/
+
+# Local settings (the real values are set in Netlify's dashboard)
+.env
+.env.local
+.env.*.local
+
+# Logs and editor/OS files
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

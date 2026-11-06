@@ -1,0 +1,305 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM  —  Cream & Sage ERP
+   bg: #f5f5dc (linen)  |  sidebar: #a3a676 (sage)
+   Title font: Cormorant Garamond (Dream Orphan proxy)
+   Body font:  Lora (Medino proxy)
+   UI chrome:  Inter  (dense tables, labels, data cells)
+   KPI cards:  rotating soft-cream backgrounds
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── CSS variables ────────────────────────────────────────────────────────── */
+:root {
+  --bg:          #f5f5dc;
+  --sidebar:     #7a7d55;
+  --card-bg:     #faf9f0;
+  --card-border: rgba(140, 128, 70, 0.18);
+  --text:        #2c2a1c;
+  --text-muted:  #6e674e;
+  --ring:        rgba(163, 166, 118, 0.35);
+
+  /* Look & feel options (Settings > Appearance overrides these at runtime) */
+  --font-ui:      'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Lora', Georgia, ui-serif, serif;
+  --font-heading: 'Cormorant Garamond', Georgia, ui-serif, serif;
+  --font-table:   'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-scale:   1;
+  --bg-translucent: rgba(245,245,220,0.92);
+  --input-bg:       rgba(255,252,238,0.85);
+  --input-bg-focus: #fffef5;
+  --sidebar-bg:          linear-gradient(180deg, #515c3d 0%, #707d54 55%, #4a5438 100%);
+  --sidebar-text:        #f3f1e7;
+  --sidebar-text-muted:  rgba(243,241,231,0.62);
+  --sidebar-accent:      #d3b273;
+  --sidebar-accent-soft: rgba(211,178,115,0.18);
+  --sidebar-border:      rgba(211,178,115,0.20);
+  --sidebar-active-bg:   linear-gradient(90deg, rgba(211,178,115,0.24) 0%, rgba(211,178,115,0.07) 100%);
+  --sidebar-hover:       rgba(255,255,255,0.07);
+  --th-bg:       rgba(163,166,118,0.12);
+  --th-text:     var(--text-muted);
+  --row-a:       rgba(250,248,242,0.6);
+  --row-b:       rgba(245,244,232,0.4);
+  --row-hover:   rgba(163,166,118,0.10);
+
+  /* KPI card rotations (10 tones) */
+  --kpi-0: #faf8f2;  /* pearl        */
+  --kpi-1: #fef9e7;  /* vanilla      */
+  --kpi-2: #fdf3e3;  /* peach        */
+  --kpi-3: #fef6e4;  /* butter       */
+  --kpi-4: #f9f3e8;  /* latte        */
+  --kpi-5: #fdf5f0;  /* blush        */
+  --kpi-6: #f7f8ee;  /* celery       */
+  --kpi-7: #f0f7f4;  /* mint         */
+  --kpi-8: #f6f2ff;  /* lavender     */
+  --kpi-9: #fff0f5;  /* dusty rose   */
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+@layer base {
+  html { font-size: calc(100% * var(--font-scale, 1)); }
+  html, body, #root { height: 100%; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Dream Orphan style for every h1 page title */
+  h1 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  /* All other headings / text use Lora */
+  h2, h3, h4, h5, h6, p, span, li, td, th, label, button, input, select, textarea {
+    font-family: var(--font-ui);
+  }
+
+  /* Tabular numbers in tables */
+  table, .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Numbers — Cormorant Garamond for all data values, money, counts */
+  .tabular, .num,
+  td, th,
+  [data-num] {
+    font-family: var(--font-table);
+  }
+
+  /* Single focus ring in sage */
+  :focus-visible { outline: 2px solid var(--sidebar); outline-offset: 2px; }
+
+  /* Warm scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: #c8c4a0 transparent; }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background-color: #c8c4a0;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover { background-color: var(--sidebar); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+/* ── Components ───────────────────────────────────────────────────────────── */
+@layer components {
+
+  /* FORMS ------------------------------------------------------------------ */
+  .input {
+    @apply w-full border px-3 py-2 text-sm transition
+           placeholder:text-ink-400
+           focus:outline-none
+           disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: 0.75rem;
+    background: var(--input-bg);
+    border-color: var(--card-border);
+    color: var(--text);
+    font-family: var(--font-ui);
+    box-shadow: 0 1px 2px rgba(60,55,30,0.04);
+  }
+  .input:hover  { border-color: var(--ring); }
+  .input:focus  {
+    border-color: var(--sidebar);
+    background: var(--input-bg-focus);
+    box-shadow: 0 0 0 3px var(--ring), 0 1px 3px rgba(60,55,30,0.06);
+    outline: none;
+  }
+
+  select.input {
+    @apply cursor-pointer appearance-none bg-no-repeat pr-9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a3a676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-position: right 0.6rem center;
+  }
+  textarea.input { @apply min-h-[76px] resize-y; }
+  .input-error   { border-color: #e07070 !important; }
+
+  .label {
+    @apply mb-1.5 block text-[12px] font-semibold uppercase tracking-wider;
+    color: var(--text-muted);
+    font-family: var(--font-ui);
+  }
+  .field-hint  { @apply mt-1 text-xs; color: var(--text-muted); font-family: var(--font-ui); }
+  .field-error { @apply mt-1 text-xs font-semibold text-red-600; font-family: var(--font-ui); }
+
+  /* BUTTONS ---------------------------------------------------------------- */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap
+           rounded-lg px-3.5 py-2 text-sm font-medium leading-5 transition duration-150
+           focus-visible:outline-none focus-visible:ring-2
+           disabled:pointer-events-none disabled:opacity-50;
+    font-family: var(--font-ui);
+    --tw-ring-color: var(--ring);
+  }
+  .btn-primary {
+    background-color: var(--sidebar);
+    @apply text-white shadow-xs hover:opacity-90 active:opacity-80;
+  }
+  .btn-secondary {
+    background: rgba(255,252,238,0.9);
+    border: 1px solid var(--card-border);
+    @apply text-ink-700 shadow-xs hover:bg-cream-200 active:bg-cream-300;
+  }
+  .btn-neutral {
+    @apply bg-cream-200 text-ink-700 hover:bg-cream-300 active:bg-cream-400;
+  }
+  .btn-danger  { @apply bg-red-600  text-white shadow-xs hover:bg-red-700  active:bg-red-800;  }
+  .btn-success { @apply bg-brand-600 text-white shadow-xs hover:bg-brand-700; }
+  .btn-ghost   {
+    @apply text-ink-600 hover:bg-cream-200 hover:text-ink-900 active:bg-cream-300;
+  }
+  .btn-sm { @apply gap-1 px-2.5 py-1.5 text-[13px]; }
+  .btn-lg { @apply gap-2 px-4 py-2.5; }
+
+  /* Icon-only square button (44px touch target, no label) */
+  .btn-icon {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition
+           hover:bg-cream-200 hover:text-ink-900
+           focus-visible:outline-none focus-visible:ring-2
+           disabled:pointer-events-none disabled:opacity-50;
+    color: var(--text-muted);
+    font-family: var(--font-ui);
+    --tw-ring-color: var(--ring);
+  }
+  /* Danger icon-button variant */
+  .btn-icon-danger {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition
+           text-red-400 hover:bg-red-50 hover:text-red-600
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300
+           disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* CARDS ------------------------------------------------------------------ */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    @apply rounded-xl shadow-card;
+  }
+  .card-pad    { @apply p-4 sm:p-5; }
+  .card-header {
+    @apply flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .card-title  { @apply text-sm font-semibold; color: var(--text); font-family: var(--font-ui); }
+
+  /* TYPOGRAPHY ------------------------------------------------------------- */
+  /* page-title → Cormorant Garamond (Dream Orphan) */
+  .page-title {
+    font-family: var(--font-heading);
+    @apply text-[26px] font-semibold leading-tight tracking-tight;
+    color: var(--text);
+  }
+  .page-subtitle { @apply mt-0.5 text-sm; color: var(--text-muted); font-family: var(--font-ui); }
+  .section-title { @apply text-sm font-semibold; color: var(--text); font-family: var(--font-ui); }
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-widest;
+    color: var(--text-muted);
+    font-family: var(--font-ui);
+  }
+
+  /* ALERTS ----------------------------------------------------------------- */
+  .alert {
+    @apply flex items-start gap-2.5 rounded-lg border px-3.5 py-2.5 text-sm;
+    font-family: var(--font-ui);
+  }
+  .alert-error   { @apply border-red-200   bg-red-50   text-red-800;   }
+  .alert-success { @apply border-green-200 bg-green-50 text-green-800; }
+  .alert-warning { @apply border-amber-200 bg-amber-50 text-amber-800; }
+  .alert-info    { border-color: var(--card-border); background: var(--kpi-1); color: var(--text); }
+
+  /* TABLES ----------------------------------------------------------------- */
+  /* Warm striped table with rounded header and no harsh lines */
+  .table-wrapper { @apply overflow-x-auto rounded-xl; }
+
+  .th {
+    @apply px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest whitespace-nowrap;
+    color: var(--th-text);
+    background: var(--th-bg);
+    font-family: var(--font-table);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .th:first-child { @apply rounded-tl-xl; }
+  .th:last-child  { @apply rounded-tr-xl; }
+
+  .td {
+    @apply px-4 py-3 text-sm whitespace-nowrap align-middle;
+    color: var(--text);
+    font-family: var(--font-table);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  /* KPI CARDS -------------------------------------------------------------- */
+  /* .kpi-N classes — the KpiCard component picks by index % 10 */
+  .kpi-0 { background: var(--kpi-0); border-color: var(--kpi-b-0, rgba(200,190,140,0.30)); }
+  .kpi-1 { background: var(--kpi-1); border-color: var(--kpi-b-1, rgba(220,200,120,0.28)); }
+  .kpi-2 { background: var(--kpi-2); border-color: var(--kpi-b-2, rgba(220,180,120,0.28)); }
+  .kpi-3 { background: var(--kpi-3); border-color: var(--kpi-b-3, rgba(220,205,120,0.28)); }
+  .kpi-4 { background: var(--kpi-4); border-color: var(--kpi-b-4, rgba(185,155,105,0.28)); }
+  .kpi-5 { background: var(--kpi-5); border-color: var(--kpi-b-5, rgba(215,165,145,0.28)); }
+  .kpi-6 { background: var(--kpi-6); border-color: var(--kpi-b-6, rgba(175,185,130,0.28)); }
+  .kpi-7 { background: var(--kpi-7); border-color: var(--kpi-b-7, rgba(140,195,155,0.28)); }
+  .kpi-8 { background: var(--kpi-8); border-color: var(--kpi-b-8, rgba(175,150,215,0.25)); }
+  .kpi-9 { background: var(--kpi-9); border-color: var(--kpi-b-9, rgba(215,150,175,0.25)); }
+
+  /* NUMBER VALUES — Cormorant Garamond */
+  /* Apply to any standalone money / count / metric value */
+  .num {
+    font-family: var(--font-heading);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* SKELETON --------------------------------------------------------------- */
+  .skeleton { @apply relative overflow-hidden rounded-md; background: rgba(163,166,118,0.15); }
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer
+           bg-gradient-to-r from-transparent via-white/40 to-transparent;
+    content: '';
+  }
+}
+
+/* ── Misc overrides ───────────────────────────────────────────────────────── */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type='number'] { -moz-appearance: textfield; appearance: textfield; }
+
+input[type='date']::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.5; }
+input[type='date']::-webkit-calendar-picker-indicator:hover { opacity: 0.85; }
+
+@media (max-width: 640px) { input, select, textarea { font-size: 16px; } }
+
+/* Phones: inputs at 16px stop iOS from zooming the page when a field is focused; nothing may scroll the page sideways. */
+@media (max-width: 640px) {
+  .input, select.input, textarea.input { font-size: 16px; }
+  body { overflow-x: hidden; }
+}

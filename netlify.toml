@@ -1,0 +1,14 @@
+# Netlify build settings. (If the repo also contains erp-backend, set Base directory to erp-frontend in Netlify.) Set VITE_API_BASE_URL in Netlify (Site configuration > Environment variables)
+# to the Render address WITH /api on the end, e.g. https://erp-backend-xxxx.onrender.com/api
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Open /sales-history (or any page) directly or refresh it: always serve the app.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
